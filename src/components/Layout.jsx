@@ -16,5 +16,3 @@ const Layout = ({ children, maxWidth = 'lg', noContainer = false }) => {
 };
 
 export default Layout;
-
-
