@@ -87,7 +87,6 @@ const StudentDashboard = () => {
             
             <Box component="main" sx={{
                 flexGrow: 1, py: 3, px: 2,
-                marginLeft: !drawerOpen ? `calc(${theme.spacing(7)} + 1px)` : `${drawerWidth}px`,
                 transition: theme.transitions.create('margin-left', { easing: 'sharp', duration: 'enteringScreen' }),
             }}>
                 <Toolbar />
