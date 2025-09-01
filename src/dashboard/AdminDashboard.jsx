@@ -16,22 +16,32 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import WorkIcon from '@mui/icons-material/Work';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
+import WorkIcon from '@mui/icons-material/Work';
 import BusinessIcon from '@mui/icons-material/Business';
-import MonitorIcon from '@mui/icons-material/Monitor';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { logout } from '../utils/auth'; // Assuming these are in your project
 import { useNavigate } from 'react-router-dom';
+
+// --- Import the new admin page components ---
+import Overview from '../pages/AdminPages/overview';
+import Students from '../pages/AdminPages/students';
+import Internships from '../pages/AdminPages/internships';
+import Companies from '../pages/AdminPages/companies';
+import Analytics from '../pages/AdminPages/analytics';
+import AdminProfile from '../pages/AdminPages/profile';
 
 const drawerWidth = 240;
 
 const sections = [
-    { key: 'internships', label: 'Internships', icon: <WorkIcon /> },
+    { key: 'overview', label: 'Overview', icon: <DashboardIcon /> },
     { key: 'students', label: 'Students', icon: <PeopleIcon /> },
-    { key: 'clients', label: 'Clients', icon: <BusinessIcon /> },
-    { key: 'monitoring', label: 'Monitoring', icon: <MonitorIcon /> },
-    { key: 'reports', label: 'Reports', icon: <BarChartIcon /> },
+    { key: 'internships', label: 'Internships', icon: <WorkIcon /> },
+    { key: 'companies', label: 'Companies', icon: <BusinessIcon /> },
+    { key: 'analytics', label: 'Analytics', icon: <BarChartIcon /> },
+    { key: 'profile', label: 'Profile', icon: <AccountCircleIcon /> },
 ];
 
 // --- A reusable card for displaying stats ---
@@ -57,7 +67,7 @@ const StatCard = ({ title, value, color = '#38BDF8' }) => (
 );
 
 const AdminDashboard = () => {
-    const [activeSection, setActiveSection] = useState('internships');
+    const [activeSection, setActiveSection] = useState('overview');
     const [drawerOpen, setDrawerOpen] = useState(true);
     const user = { name: 'Admin', email: 'admin@example.com' }; // Mock user
     const navigate = useNavigate();
@@ -162,42 +172,17 @@ const AdminDashboard = () => {
                 component="main"
                 sx={{
                     flexGrow: 1, py: 3, px: 2,
-                    marginLeft: !drawerOpen ? `calc(${theme.spacing(7)} + 1px)` : `${drawerWidth}px`,
-                    [theme.breakpoints.up('sm')]: { marginLeft: !drawerOpen ? `calc(${theme.spacing(8)} + 1px)` : `${drawerWidth}px` },
                     transition: theme.transitions.create('margin-left', { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen }),
                 }}
             >
                 <Toolbar />
-                {activeSection === 'internships' && (
-                    <Box>
-                        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>Internships</Typography>
-                        <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
-                            <StatCard title="Total Internships" value="12" />
-                            <StatCard title="Total Students" value="58" color="#A78BFA" />
-                            <StatCard title="Total Clients" value="7" />
-                        </Box>
-                        <Box sx={{ p: 3, bgcolor: '#1E293B', borderRadius: 4, border: '1px solid #334155' }}>
-                            <Typography variant="h6" sx={{ color: '#38BDF8' }} gutterBottom>Recent Activity</Typography>
-                            <Box component="ul" sx={{ m: 0, p: 0, pl: 2.5, color: '#94A3B8', listStyleType: 'disc' }}>
-                                <li>New internship posted: Digital Marketing Intern</li>
-                                <li>Student John Doe submitted project task</li>
-                                <li>Client Acme Corp started new campaign</li>
-                            </Box>
-                        </Box>
-                    </Box>
-                )}
-                {activeSection === 'students' && (
-                    <Box><Typography variant="h4" gutterBottom>Students</Typography><Typography>View and manage student profiles and progress.</Typography></Box>
-                )}
-                {activeSection === 'clients' && (
-                    <Box><Typography variant="h4" gutterBottom>Clients</Typography><Typography>View client details and active campaigns.</Typography></Box>
-                )}
-                {activeSection === 'monitoring' && (
-                    <Box><Typography variant="h4" gutterBottom>Monitoring</Typography><Typography>Monitor student and client project activity.</Typography></Box>
-                )}
-                {activeSection === 'reports' && (
-                    <Box><Typography variant="h4" gutterBottom>Reports</Typography><Typography>Generate reports on program and project performance.</Typography></Box>
-                )}
+                {/* --- Content area with new admin pages --- */}
+                {activeSection === 'overview' && <Overview />}
+                {activeSection === 'students' && <Students />}
+                {activeSection === 'internships' && <Internships />}
+                {activeSection === 'companies' && <Companies />}
+                {activeSection === 'analytics' && <Analytics />}
+                {activeSection === 'profile' && <AdminProfile />}
             </Box>
         </Box>
     );
