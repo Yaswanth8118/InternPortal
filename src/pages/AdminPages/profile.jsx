@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Box, 
     Typography, 
@@ -12,17 +12,23 @@ import {
     FormControlLabel,
     Tab,
     Tabs,
-    Paper
+    Paper,
+    Alert
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SecurityIcon from '@mui/icons-material/Security';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import InfoCard from '../../components/InfoCard';
+import { studentAPI } from '../../utils/api'; // Using student API for admin profile, ideally should be adminAPI
 
 const AdminProfile = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
+    const [adminId] = useState(1); // In real app, get from auth context
 
     // State for profile data
     const [profileData, setProfileData] = useState({
@@ -85,20 +91,72 @@ const AdminProfile = () => {
         }));
     };
 
-    const handleSaveProfile = () => {
-        console.log('Saving profile data:', profileData);
-        setIsEditing(false);
-        // In a real application, you would make an API call here
+    const handleSaveProfile = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            // Make API call to update admin profile
+            // Using student API as placeholder - should be adminAPI.update(adminId, profileData)
+            await studentAPI.update(adminId, profileData);
+            
+            setSuccess(true);
+            setIsEditing(false);
+            
+            // Clear success message after 3 seconds
+            setTimeout(() => setSuccess(false), 3000);
+            
+            // Dispatch custom event to notify other components of admin profile update
+            window.dispatchEvent(new CustomEvent('adminProfileUpdated', { 
+                detail: { adminId, profileData } 
+            }));
+            
+        } catch (err) {
+            console.error('Error saving admin profile:', err);
+            setError(err.message || 'Failed to save profile. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleSaveNotifications = () => {
-        console.log('Saving notification settings:', notifications);
-        alert('Notification settings saved successfully!');
+    const handleSaveNotifications = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            // Make API call to save notification settings
+            // This should ideally be adminAPI.updateNotifications(adminId, notifications)
+            console.log('Saving notification settings:', notifications);
+            
+            setSuccess(true);
+            setTimeout(() => setSuccess(false), 3000);
+            
+        } catch (err) {
+            console.error('Error saving notification settings:', err);
+            setError(err.message || 'Failed to save notification settings.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleSaveSecurity = () => {
-        console.log('Saving security settings:', securitySettings);
-        alert('Security settings saved successfully!');
+    const handleSaveSecurity = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            // Make API call to save security settings
+            // This should ideally be adminAPI.updateSecurity(adminId, securitySettings)
+            console.log('Saving security settings:', securitySettings);
+            
+            setSuccess(true);
+            setTimeout(() => setSuccess(false), 3000);
+            
+        } catch (err) {
+            console.error('Error saving security settings:', err);
+            setError(err.message || 'Failed to save security settings.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const getInitials = (name) => {
@@ -116,6 +174,18 @@ const AdminProfile = () => {
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
                 Admin Profile
             </Typography>
+
+            {/* Success/Error Alerts */}
+            {success && (
+                <Alert severity="success" sx={{ mb: 3 }}>
+                    Settings updated successfully!
+                </Alert>
+            )}
+            {error && (
+                <Alert severity="error" sx={{ mb: 3 }}>
+                    {error}
+                </Alert>
+            )}
 
             {/* Profile Header Card */}
             <InfoCard sx={{ mb: 4 }}>

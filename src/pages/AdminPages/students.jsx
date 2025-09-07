@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Box, 
     Typography, 
@@ -15,14 +15,16 @@ import {
     Grid,
     TextField,
     InputAdornment,
-    TablePagination
+    TablePagination,
+    CircularProgress
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import InfoCard from '../../components/InfoCard';
+import { studentAPI } from '../../utils/api';
 
-// Mock student data
-const studentsData = [
+// Mock student data - fallback if API fails
+const mockStudentsData = [
     { 
         id: 1, 
         name: 'Alice Johnson', 
@@ -127,6 +129,50 @@ const Students = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [studentsData, setStudentsData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Fetch students data from API
+    const fetchStudentsData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await studentAPI.getAll();
+            if (response.data) {
+                setStudentsData(response.data);
+            }
+        } catch (err) {
+            console.error('Error fetching students:', err);
+            setError('Failed to load students data');
+            // Fallback to mock data if API fails
+            setStudentsData(mockStudentsData);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch data on component mount
+    useEffect(() => {
+        fetchStudentsData();
+    }, []);
+
+    // Listen for profile updates
+    useEffect(() => {
+        const handleProfileUpdate = (event) => {
+            const { studentId, profileData } = event.detail;
+            setStudentsData(prevData => 
+                prevData.map(student => 
+                    student.id === studentId 
+                        ? { ...student, ...profileData, name: profileData.fullName }
+                        : student
+                )
+            );
+        };
+
+        window.addEventListener('profileUpdated', handleProfileUpdate);
+        return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
+    }, []);
 
     // Filter students based on search term
     const filteredStudents = studentsData.filter(student =>
@@ -168,6 +214,12 @@ const Students = () => {
             </Typography>
 
             {/* Student Statistics */}
+            {loading && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+                    <CircularProgress />
+                </Box>
+            )}
+
             <Grid container spacing={3} sx={{ mb: 4 }}>
                 <Grid item xs={12} md={3}>
                     <InfoCard sx={{ textAlign: 'center', p: 3 }}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -30,9 +30,24 @@ const sections = [
 const StudentDashboard = () => {
     const [activeSection, setActiveSection] = useState('dashboard');
     const [drawerOpen, setDrawerOpen] = useState(true);
-    const user = { name: 'tejo', email: 'tejohere6@gmail.com' };
+    const [user, setUser] = useState({ name: 'tejo', email: 'tejohere6@gmail.com' });
     const navigate = useNavigate();
     const theme = useTheme();
+
+    // Listen for profile updates
+    useEffect(() => {
+        const handleProfileUpdate = (event) => {
+            const { profileData } = event.detail;
+            setUser(prevUser => ({
+                ...prevUser,
+                name: profileData.fullName || prevUser.name,
+                email: profileData.email || prevUser.email
+            }));
+        };
+
+        window.addEventListener('profileUpdated', handleProfileUpdate);
+        return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
+    }, []);
 
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const handleLogout = () => { logout(); navigate('/login'); };
