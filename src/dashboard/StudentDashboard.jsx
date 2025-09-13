@@ -40,7 +40,7 @@ const StudentDashboard = () => {
             const { profileData } = event.detail;
             setUser(prevUser => ({
                 ...prevUser,
-                name: profileData.fullName || prevUser.name,
+                name: profileData.name || prevUser.name,
                 email: profileData.email || prevUser.email
             }));
         };

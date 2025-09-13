@@ -17,12 +17,23 @@ const apiRequest = async (endpoint, options = {}) => {
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.message || 'API request failed');
+      // Provide more detailed error message
+      const errorMessage = data.message || `HTTP ${response.status}: ${response.statusText}`;
+      const error = new Error(errorMessage);
+      error.status = response.status;
+      error.details = data.details || null;
+      throw error;
     }
     
     return data;
   } catch (error) {
     console.error(`API Error (${endpoint}):`, error);
+    
+    // If it's a network error, provide a helpful message
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('Network error: Unable to connect to server. Please check your connection.');
+    }
+    
     throw error;
   }
 };

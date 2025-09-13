@@ -112,10 +112,20 @@ router.put('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Error updating student:', error);
+    
+    // More detailed error handling
+    let errorMessage = 'Error updating student';
+    if (error.name === 'SequelizeValidationError') {
+      errorMessage = 'Validation failed: ' + error.errors.map(e => e.message).join(', ');
+    } else if (error.name === 'SequelizeUniqueConstraintError') {
+      errorMessage = 'Duplicate entry: ' + error.errors.map(e => `${e.path} already exists`).join(', ');
+    }
+    
     res.status(400).json({
       success: false,
-      message: 'Error updating student',
-      error: error.message
+      message: errorMessage,
+      error: error.message,
+      details: error.errors || null
     });
   }
 });

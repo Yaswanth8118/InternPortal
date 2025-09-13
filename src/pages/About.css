@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa; /* Light, clean background */
+  color: #343a40; /* Dark gray for text */
+  line-height: 1.6;
+}
+
+.about-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 32px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 64px;
+  padding: 48px;
+  background: linear-gradient(135deg, #6a11cb 0%, #25fc5b 100%);
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(190, 23, 23, 0.1);
+  transform: perspective(1500px) rotateX(8deg);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.about-header:hover {
+  transform: perspective(1500px) rotateX(0deg);
+  box-shadow: 0 15px 40px rgba(106, 17, 203, 0.3);
+}
+
+.about-header h1 {
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.about-section {
+  margin-bottom: 64px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUp 0.8s forwards;
+}
+
+.about-section h2, .about-section h3 {
+  color: #6a11cb;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
+  font-weight: 600;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.service-card {
+  padding: 32px;
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(106, 17, 203, 0.15);
+  border-color: #6a11cb;
+}
+
+.service-card h3 {
+  border-bottom: none;
+  margin-bottom: 8px;
+  font-size: 19px;
+  color: #2575fc;
+}
+
+.roles-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.roles-list li {
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #2575fc;
+  transition: background-color 0.3s, padding-left 0.3s, border-left-color 0.3s;
+}
+
+.roles-list li:hover {
+  background-color: #eef2ff;
+  padding-left: 24px;
+  border-left-color: #6a11cb;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for sections */
+.overview-section { animation-delay: 0.2s; }
+.services-section { animation-delay: 0.4s; }
+.mission-section { animation-delay: 0.6s; }
+.internship-section { animation-delay: 0.8s; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-header h1 {
+    font-size: 44px;
+  }
+
+  .about-container {
+    width: 95%;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-header h1 {
+    font-size: 35px;
+  }
+
+  .about-section {
+    padding: 16px;
+  }
+}

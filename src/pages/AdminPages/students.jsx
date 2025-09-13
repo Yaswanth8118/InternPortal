@@ -164,7 +164,7 @@ const Students = () => {
             setStudentsData(prevData => 
                 prevData.map(student => 
                     student.id === studentId 
-                        ? { ...student, ...profileData, name: profileData.fullName }
+                        ? { ...student, ...profileData, name: profileData.name }
                         : student
                 )
             );

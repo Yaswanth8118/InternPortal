@@ -13,7 +13,7 @@ const Profile = () => {
 
     // State to hold the profile data
     const [profileData, setProfileData] = useState({
-        fullName: 'Tejo',
+        name: 'Tejo',
         email: 'tejohere6@gmail.com',
         phone: '123-456-7890',
         address: '123 Main St, Bheemunipatnam, Andhra Pradesh'
@@ -27,7 +27,7 @@ const Profile = () => {
                 const response = await studentAPI.getById(studentId);
                 if (response.data) {
                     setProfileData({
-                        fullName: response.data.fullName || 'Tejo',
+                        name: response.data.name || 'Tejo',
                         email: response.data.email || 'tejohere6@gmail.com',
                         phone: response.data.phone || '123-456-7890',
                         address: response.data.address || '123 Main St, Bheemunipatnam, Andhra Pradesh'
@@ -121,8 +121,8 @@ const Profile = () => {
                     <Stack spacing={3}>
                         <TextField
                             label="Full Name"
-                            name="fullName"
-                            value={profileData.fullName}
+                            name="name"
+                            value={profileData.name}
                             onChange={handleChange}
                             variant="outlined"
                             inputProps={{ style: { color: '#E2E8F0' } }}
@@ -164,7 +164,7 @@ const Profile = () => {
                     <Stack spacing={2}>
                         <Box>
                             <Typography variant="body2" sx={{ color: '#94A3B8' }}>Full Name</Typography>
-                            <Typography variant="body1" sx={{ color: '#E2E8F0' }}>{profileData.fullName}</Typography>
+                            <Typography variant="body1" sx={{ color: '#E2E8F0' }}>{profileData.name}</Typography>
                         </Box>
                         <Box>
                             <Typography variant="body2" sx={{ color: '#94A3B8' }}>Email Address</Typography>
